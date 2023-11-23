@@ -3,16 +3,25 @@
     <h1>{{ msg }}</h1>
 
     <button @click="sign">sign</button>
+    <button @click="pack">pack</button>
   </div>
 </template>
 
 <script>
+import {ethers} from 'ethers'
 export default {
   name: "HelloWorld",
   props: {
     msg: String,
   },
   methods: {
+     pack(){
+      const v = ethers.utils.solidityPack(["uint256","uint256"],[1,2])
+      const hash = ethers.utils.keccak256(v)
+      console.log(hash)
+
+     },
+
     sign() {
       let msg = window["EthSignUtils"].personalSign({
         privateKey: this.hexToUint8Array(
