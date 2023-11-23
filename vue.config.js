@@ -15,9 +15,7 @@ module.exports = defineConfig({
                 util: false,
                 https: false,
                 zlib: false,
-                http: false,
-                process: require.resolve("process/browser"),
-                stream: require.resolve("stream-browserify"),
+                http: false
             },
         },
     },
