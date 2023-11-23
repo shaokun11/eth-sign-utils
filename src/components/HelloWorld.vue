@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import { personalSign } from "@metamask/eth-sig-util";
 export default {
   name: "HelloWorld",
   props: {
@@ -15,18 +14,33 @@ export default {
   },
   methods: {
     sign() {
-      const privateKey = Buffer.from(
-        "4af1bceebf7f3634ec3cff8a2c38e51178d5d4ce585c52d6043e5e2cc3418bb0",
-        "hex"
-      );
-      const helloWorldMessage = `0x${Buffer.from("Hello, world!").toString(
-        "hex"
-      )}`;
-      let msg = personalSign({
-        privateKey,
-        data: helloWorldMessage,
+      let msg = window["EthSignUtils"].personalSign({
+        privateKey: this.hexToUint8Array(
+          "4af1bceebf7f3634ec3cff8a2c38e51178d5d4ce585c52d6043e5e2cc3418bb0"
+        ),
+        data: "hello world",
       });
       console.log(msg);
+    },
+    hexToUint8Array(hexString) {
+      // 去除字符串中的空格
+      hexString = hexString.replace(/\s/g, "");
+
+      // 确保 hexString 的长度为偶数
+      if (hexString.length % 2 !== 0) {
+        throw new Error("无效的十六进制字符串");
+      }
+
+      // 创建一个 Uint8Array 来存储结果
+      const uint8Array = new Uint8Array(hexString.length / 2);
+
+      // 将每两个字符转换为一个字节的十六进制值
+      for (let i = 0; i < hexString.length; i += 2) {
+        const byteValue = parseInt(hexString.substr(i, 2), 16);
+        uint8Array[i / 2] = byteValue;
+      }
+
+      return uint8Array;
     },
   },
 };
